@@ -269,3 +269,147 @@ export const RoadNetworkSvg: React.FC<RoadNetworkSvgProps> = ({
               )}
             </g>
 
+          </g>
+        );
+      })}
+
+      {/* Intersection patches with automatic zebra crossings */}
+      <g clipPath="url(#island-surface-clip)" pointerEvents="none">
+        {crossings.map((c, ci) => (
+          <g key={`x-${ci}`} transform={`translate(${c.x}, ${c.y})`}>
+            {c.dirs.map((d, di) => (
+              <rect key={`p-${di}`} x={-d.half} y={-d.width / 2} width={d.half * 2} height={d.width} fill={c.color} transform={`rotate(${(d.angle * 180) / Math.PI})`} />
+            ))}
+            {c.dirs.map((d, di) => (
+              <g key={`z-${di}`} transform={`rotate(${(d.angle * 180) / Math.PI})`}>
+                {[-1, 1].map((side) => (
+                  <g key={side} transform={`translate(${side * (d.half + 7)}, 0)`}>
+                    {Array.from({ length: Math.max(3, Math.floor(d.width / 7)) }, (_, k, arr) => (
+                      <rect key={k} x="-4" y={-d.width / 2 + 2 + k * ((d.width - 4) / arr.length)} width="8" height={(d.width - 4) / arr.length - 2.5} fill="#ffffff" opacity="0.92" rx="0.5" />
+                    ))}
+                  </g>
+                ))}
+              </g>
+            ))}
+          </g>
+        ))}
+      </g>
+
+      {/* Animated traffic and pedestrians */}
+      <g clipPath="url(#island-surface-clip)" pointerEvents="none">
+        {styled.map(({ road, pathD, roadWidth, sidewalkWidth, length }, ri) => {
+          if (length < 60) return null;
+          const carCount = Math.min(4, Math.max(1, Math.floor(length / 220)));
+          const lane = Math.max(4, roadWidth / 4);
+          const carDur = length / 55;
+          const walkDur = length / 12;
+          return (
+            <g key={`tr-${road.id}`}>
+              {Array.from({ length: carCount * 2 }, (_, i) => {
+                const reverse = i % 2 === 1;
+                const type = CAR_TYPES[(ri * 3 + i) % CAR_TYPES.length]!;
+                return (
+                  <g key={`car-${i}`}>
+                    {renderCar(type, lane)}
+                    <animateMotion dur={`${carDur}s`} begin={`-${((carDur * (i + ri * 0.37)) / (carCount * 2)).toFixed(2)}s`} repeatCount="indefinite" path={pathD} rotate={reverse ? 'auto-reverse' : 'auto'} {...(reverse ? { keyPoints: '1;0', keyTimes: '0;1', calcMode: 'linear' } : {})} />
+                  </g>
+                );
+              })}
+              {sidewalkWidth > 0 && Array.from({ length: Math.min(6, Math.max(2, Math.floor(length / 120))) }, (_, i) => {
+                const reverse = i % 2 === 1;
+                const side = (roadWidth / 2 + sidewalkWidth / 2) * (i % 4 < 2 ? 1 : -1) * (reverse ? -1 : 1);
+                return (
+                  <g key={`ped-${i}`}>
+                    {renderPerson(SHIRTS[(ri + i) % SHIRTS.length]!, side)}
+                    <animateMotion dur={`${walkDur}s`} begin={`-${((walkDur * i) / 6 + ri).toFixed(2)}s`} repeatCount="indefinite" path={pathD} rotate={reverse ? 'auto-reverse' : 'auto'} {...(reverse ? { keyPoints: '1;0', keyTimes: '0;1', calcMode: 'linear' } : {})} />
+                  </g>
+                );
+              })}
+            </g>
+          );
+        })}
+      </g>
+
+      {/* Interaction layer (selection, dragging, control points) */}
+      {styled.map(({ road, pts, pathD, roadWidth, totalPavedWidth, linejoin, linecap }) => {
+        const isSelected = selectedRoadId === road.id;
+        return (
+          <g
+            key={road.id}
+            onClick={(e) => {
+              if (isEditMode && onSelectRoad) {
+                e.stopPropagation();
+                onSelectRoad(road);
+              }
+            }}
+            onMouseDown={(e) => {
+              if (isEditMode && isSelected && !road.locked && onStartDragRoadPoint) {
+                e.stopPropagation();
+                onStartDragRoadPoint(e, road.id, -1);
+              }
+            }}
+            className={isEditMode ? (isSelected ? 'cursor-move' : 'cursor-pointer') : 'pointer-events-none'}
+          >
+            <path d={pathD} fill="none" stroke="transparent" strokeWidth={totalPavedWidth} strokeLinecap={linecap} strokeLinejoin={linejoin} pointerEvents="stroke" />
+
+            {isSelected && isEditMode && (
+              <path d={pathD} fill="none" stroke="#2563eb" strokeWidth={roadWidth + 14} strokeDasharray="8 6" strokeLinecap={linecap} strokeLinejoin={linejoin} strokeMiterlimit={5} opacity="0.75" />
+            )}
+
+            {isSelected && isEditMode && (
+              <g className="select-none">
+                {pts.map((pt, pIdx) => {
+                  const isEnd = pIdx === 0 || pIdx === pts.length - 1;
+                  return (
+                    <g
+                      key={`handle-${pIdx}`}
+                      transform={`translate(${pt.x}, ${pt.y})`}
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                        if (onStartDragRoadPoint) onStartDragRoadPoint(e, road.id, pIdx);
+                      }}
+                      className="cursor-move group"
+                    >
+                      {isEnd && <circle cx="0" cy="0" r="16" fill="#3b82f6" opacity="0.3" className="animate-ping" />}
+                      <circle cx="0" cy="0" r={isEnd ? 11 : 8.5} fill={isEnd ? '#2563eb' : '#059669'} stroke="#ffffff" strokeWidth="2.5" filter="url(#shadowDiorama)" className="group-hover:scale-110 transition-transform" />
+                      <text x="0" y={isEnd ? 3.5 : 3} fill="#ffffff" fontSize={isEnd ? '10' : '8.5'} fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">
+                        {isEnd ? '⇄' : (pIdx + 1)}
+                      </text>
+                      {isEnd && (
+                        <g transform="translate(0, -22)" className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                          <rect x="-42" y="-10" width="84" height="18" rx="4" fill="#0f172a" opacity="0.9" />
+                          <text x="0" y="2" fill="#ffffff" fontSize="8" fontWeight="bold" textAnchor="middle">Comprimento ⇄</text>
+                        </g>
+                      )}
+                    </g>
+                  );
+                })}
+
+                {pts.slice(0, -1).map((p1, idx) => {
+                  const p2 = pts[idx + 1];
+                  if (!p2) return null;
+                  const midX = (p1.x + p2.x) / 2;
+                  const midY = (p1.y + p2.y) / 2;
+                  return (
+                    <g
+                      key={`add-pt-${idx}`}
+                      transform={`translate(${midX}, ${midY})`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onAddPointToRoad) onAddPointToRoad(road.id, idx + 1, midX, midY);
+                      }}
+                      className="cursor-pointer group"
+                    >
+                      <circle cx="0" cy="0" r="8" fill="#f59e0b" stroke="#ffffff" strokeWidth="2" className="group-hover:scale-125 transition-transform" />
+                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="bold" textAnchor="middle">+</text>
+                    </g>
+                  );
+                })}
+              </g>
+            )}
+          </g>
+        );
+      })}
+    </g>
+  );
+};
