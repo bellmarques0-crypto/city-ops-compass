@@ -360,7 +360,7 @@ export const IsometricCity: React.FC<IsometricCityProps> = ({
     const isPlaza = el.type === 'praca_central' || el.type === 'praca_pequena' || el.type === 'jardim' || el.type === 'area_gramada';
     const isSidewalkOrCrosswalk = el.type === 'calcada' || el.type === 'faixa_pedestres' || el.type === 'caminho_pedestres';
     const isPlaca = el.type === 'ponto_encontro';
-    const isDeco = el.type === 'arvores' || el.type === 'canteiros';
+    const isDeco = el.type === 'arvores' || el.type === 'canteiros' || el.type.startsWith('arvore_') || el.type === 'arbustos';
 
     if (isPlaza && !isLayerVisible('pracas')) return false;
     if (isSidewalkOrCrosswalk && !isLayerVisible('calcadas')) return false;

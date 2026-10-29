@@ -51,6 +51,10 @@ export type UrbanElementType =
   | 'jardim'              // Flower garden bed
   | 'area_gramada'        // Green grassy park / lawn
   | 'arvores'             // Palm trees or shady tree cluster
+  | 'arvore_carvalho'     // Round-canopy oak
+  | 'arvore_ipe'          // Flowering yellow ipê
+  | 'arvore_pinheiro'     // Conical pine / cypress
+  | 'arbustos'            // Low shrubs
   | 'canteiros'           // Low trimmed hedges
   | 'bancos'              // Park benches & meeting tables
   | 'caminho_pedestres'   // Pedestrian cobblestone walkway
