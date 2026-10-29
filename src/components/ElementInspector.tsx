@@ -144,6 +144,12 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
     onUpdateRoad({ points: newPoints });
   };
 
+  const moveRoad = (dx: number, dy: number) => {
+    const pts = selectedRoad?.points;
+    if (!pts) return;
+    onUpdateRoad({ points: pts.map(p => ({ x: p.x + dx, y: p.y + dy })) });
+  };
+
   const rotateRoad = (deg: number) => {
     const pts = selectedRoad?.points;
     if (!pts || pts.length < 2) return;
@@ -645,6 +651,22 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Move whole road */}
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <span className="font-bold text-slate-700 text-[11px] block">Mover Rua Inteira</span>
+              <div className="grid grid-cols-3 gap-1 w-32 mx-auto">
+                {([
+                  ['↖', -40, -23], ['↑', 0, -40], ['↗', 40, -23],
+                  ['←', -40, 0], ['', 0, 0], ['→', 40, 0],
+                  ['↙', -40, 23], ['↓', 0, 40], ['↘', 40, 23]
+                ] as const).map(([lbl, dx, dy], i) => lbl ? (
+                  <button key={i} type="button" onClick={() => moveRoad(dx, dy)}
+                    className="py-1 rounded bg-white border border-slate-200 hover:bg-slate-100 font-bold">{lbl}</button>
+                ) : <span key={i} />)}
+              </div>
+              <p className="text-[10px] text-slate-500 text-center">Ou arraste a rua no mapa.</p>
             </div>
 
             {/* Road Rotation (Girar Rua) */}
