@@ -316,7 +316,7 @@ export const IsometricCity: React.FC<IsometricCityProps> = ({
   const handleStartDragRoadPoint = (e: React.MouseEvent, roadId: string, pointIndex: number) => {
     if (!isEditMode || isLayerLocked('ruas')) return;
     e.stopPropagation();
-    setDraggingRoadPoint({ roadId, pointIndex });
+    setDraggingRoadPoint({ roadId, pointIndex, last: pointIndex === -1 ? screenToSvgCoords(e.clientX, e.clientY) : undefined });
   };
 
   // Start dragging an urban element

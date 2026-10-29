@@ -75,7 +75,13 @@ export const RoadNetworkSvg: React.FC<RoadNetworkSvgProps> = ({
                 onSelectRoad(road);
               }
             }}
-            className={isEditMode ? 'cursor-pointer' : 'pointer-events-none'}
+            onMouseDown={(e) => {
+              if (isEditMode && isSelected && !road.locked && onStartDragRoadPoint) {
+                e.stopPropagation();
+                onStartDragRoadPoint(e, road.id, -1);
+              }
+            }}
+            className={isEditMode ? (isSelected ? 'cursor-move' : 'cursor-pointer') : 'pointer-events-none'}
           >
             {/* Paved road geometry clipped to the island diamond perimeter */}
             <g clipPath="url(#island-surface-clip)">
