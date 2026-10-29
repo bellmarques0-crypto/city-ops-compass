@@ -87,6 +87,7 @@ export const IsometricCity: React.FC<IsometricCityProps> = ({
   const [draggingRoadPoint, setDraggingRoadPoint] = useState<{
     roadId: string;
     pointIndex: number;
+    last?: { x: number; y: number };
   } | null>(null);
 
   // Building resizing state
@@ -210,6 +211,15 @@ export const IsometricCity: React.FC<IsometricCityProps> = ({
     // 1. Dragging road point handle
     if (draggingRoadPoint && isEditMode) {
       const coords = screenToSvgCoords(e.clientX, e.clientY);
+      if (draggingRoadPoint.pointIndex === -1) {
+        const last = draggingRoadPoint.last ?? coords;
+        const dx = Math.round(coords.x - last.x), dy = Math.round(coords.y - last.y);
+        if (dx || dy) {
+          onUpdateRoadPointPos(draggingRoadPoint.roadId, -1, dx, dy);
+          setDraggingRoadPoint({ ...draggingRoadPoint, last: { x: last.x + dx, y: last.y + dy } });
+        }
+        return;
+      }
       onUpdateRoadPointPos(draggingRoadPoint.roadId, draggingRoadPoint.pointIndex, coords.x, coords.y);
       return;
     }
