@@ -72,8 +72,8 @@ export const FloorPlanView: React.FC<FloorPlanViewProps> = ({
   return (
     <div className="flex flex-col h-screen bg-[#f1f5f9] select-none">
       {/* Top Header */}
-      <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shrink-0 shadow-xs z-30">
-        <div className="flex items-center gap-4">
+      <header className="bg-white border-b border-slate-200 px-4 md:px-6 py-3 flex flex-wrap items-center justify-between shrink-0 shadow-xs z-30 gap-3">
+        <div className="flex flex-wrap items-center gap-4">
           <button
             onClick={onBackToCity}
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-xs"
@@ -126,9 +126,9 @@ export const FloorPlanView: React.FC<FloorPlanViewProps> = ({
       </header>
 
       {/* Filter Toolbar */}
-      <div className="bg-white/80 border-b border-slate-200 px-6 py-2 flex items-center justify-between gap-4 shrink-0 backdrop-blur-xs">
+      <div className="bg-white/80 border-b border-slate-200 px-4 md:px-6 py-2 flex flex-wrap items-center justify-between gap-4 shrink-0 backdrop-blur-xs">
         {/* Status Filter Tabs */}
-        <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs font-medium">
+        <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs font-medium">
           <button
             onClick={() => setStatusFilter('all')}
             className={`px-3 py-1 rounded-md transition-colors ${
@@ -189,10 +189,10 @@ export const FloorPlanView: React.FC<FloorPlanViewProps> = ({
       </div>
 
       {/* Main Floor Plan Blueprint Area */}
-      <div className="flex-1 overflow-auto p-6 flex items-center justify-center">
+      <div className="flex-1 min-h-0 overflow-auto p-6">
         {/* Architectural Building Interior Container */}
         <div 
-          className="relative bg-white rounded-3xl border-4 border-slate-800 shadow-2xl p-6 min-w-[1080px] max-w-[1280px]"
+          className="relative mx-auto bg-white rounded-3xl border-4 border-slate-800 shadow-2xl p-6 min-w-[1080px] max-w-[1280px]"
           style={{
             backgroundImage: `
               radial-gradient(#e2e8f0 1.5px, transparent 1.5px),

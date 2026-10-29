@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Building, 
   Workstation, 
@@ -102,6 +102,21 @@ export const IsometricCity: React.FC<IsometricCityProps> = ({
   const [dragPreview, setDragPreview] = useState<{ x: number; y: number } | null>(null);
   const [isInvalidOverlap, setIsInvalidOverlap] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const fit = () => {
+      if (container.clientWidth >= 768) return;
+      const fittedZoom = Math.min(0.95, container.clientWidth / 1800);
+      setZoom(fittedZoom);
+      setPan({ x: 0, y: 160 });
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
 
   // Layer check helpers
   const isLayerVisible = (key: CityLayerKey): boolean => {
@@ -312,12 +327,13 @@ export const IsometricCity: React.FC<IsometricCityProps> = ({
   };
 
   const handleZoom = (delta: number) => {
-    setZoom(prev => Math.min(1.5, Math.max(0.6, +(prev + delta).toFixed(2))));
+    setZoom(prev => Math.min(1.5, Math.max(0.15, +(prev + delta).toFixed(2))));
   };
 
   const handleReset = () => {
-    setZoom(0.95);
-    setPan({ x: 30, y: 10 });
+    const width = containerRef.current?.clientWidth ?? 1800;
+    setZoom(width < 768 ? width / 1800 : 0.95);
+    setPan(width < 768 ? { x: 0, y: 160 } : { x: 30, y: 10 });
   };
 
   // Filter visible buildings by type and layer visibility
@@ -396,7 +412,7 @@ export const IsometricCity: React.FC<IsometricCityProps> = ({
       </div>
 
       {/* Editor Status Indicator / Orientation */}
-      <div className="absolute top-4 left-6 z-20 pointer-events-none flex items-center gap-2 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/80 shadow-xs text-xs font-semibold text-slate-800">
+      <div className="absolute top-4 left-6 z-20 pointer-events-none hidden md:flex items-center gap-2 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/80 shadow-xs text-xs font-semibold text-slate-800">
         <Compass className="w-4 h-4 text-emerald-600" />
         <span>Campus Operacional 2.5D</span>
         <span className="text-slate-300">|</span>

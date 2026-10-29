@@ -23,9 +23,9 @@ export const IsometricTopBar: React.FC<IsometricTopBarProps> = ({
   onResetDemo
 }) => {
   return (
-    <header className="absolute top-4 left-6 right-6 z-40 flex items-center justify-between gap-4 pointer-events-none select-none">
+    <header className="absolute top-4 left-4 right-4 md:left-6 md:right-6 z-40 flex flex-wrap md:flex-nowrap items-center justify-between gap-2 md:gap-4 pointer-events-none select-none">
       {/* Brand Lockup Pill (Left, like CineVille pill card in screenshot) */}
-      <div className="pointer-events-auto bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg border border-white/80 flex items-center gap-3">
+      <div className="pointer-events-auto bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg border border-white/80 flex items-center gap-3 shrink-0">
         <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-500 flex items-center justify-center text-white shadow-sm font-bold text-base">
           <Building2 className="w-5 h-5 text-white" />
         </div>
@@ -40,7 +40,7 @@ export const IsometricTopBar: React.FC<IsometricTopBarProps> = ({
       </div>
 
       {/* Center High-Level KPI Strip (like CineVille in screenshot) */}
-      <div className="pointer-events-auto hidden md:flex items-center gap-8 bg-white/95 backdrop-blur-md px-6 py-2.5 rounded-2xl shadow-lg border border-white/80 text-xs">
+      <div className="pointer-events-auto hidden xl:flex items-center gap-4 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg border border-white/80 text-xs">
         {/* Metric 1 */}
         <div className="flex flex-col">
           <span className="text-[10px] font-mono font-semibold text-slate-500 flex items-center gap-1.5 uppercase">
