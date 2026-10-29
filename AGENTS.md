@@ -11,3 +11,4 @@
 
 - Keep the imported Cidade Operacional entry in `src/routes/index.tsx` and reusable original city modules in `src/components`, `src/data`, `src/types`, and `src/services`; preserve the source design and interactions while using TanStack Start's bootstrap.
 - The imported app retains its original browser-local storage behavior; do not silently replace it with a shared backend during source migration.
+- Operational indicators live in src/data/operationalIndicators.ts keyed by stable building id (never name); unknown values stay null and render as 'Sem dados disponíveis' so no invented numbers appear as real.
