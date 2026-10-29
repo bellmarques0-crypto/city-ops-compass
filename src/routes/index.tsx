@@ -315,6 +315,9 @@ function CidadeOperacional() {
     const updated = roads.map(r => {
       if (r.id !== roadId) return r;
       const newPoints = r.points ? [...r.points] : [{ x: r.x1 || 300, y: r.y1 || 500 }, { x: r.x2 || 800, y: r.y2 || 700 }];
+      if (pointIndex === -1) {
+        return { ...r, points: newPoints.map(p => ({ x: p.x + newX, y: p.y + newY })) };
+      }
       if (newPoints[pointIndex]) {
         newPoints[pointIndex] = { x: newX, y: newY };
       }

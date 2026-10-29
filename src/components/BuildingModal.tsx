@@ -387,15 +387,18 @@ export const BuildingModal: React.FC<BuildingModalProps> = ({
                 onChange={e => setModel(e.target.value as BuildingArchitectureModel)}
                 className="w-full px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg bg-white font-medium"
               >
-                <option value="corporate-hotel">Hotel Corporativo / Resort (PINE)</option>
-                <option value="modern-fintech">Cubo Tecnológico Fintech (BYX)</option>
-                <option value="soundstage-hangar">Hangar Arqueado / Soundstage (AMIGOZ)</option>
-                <option value="neon-billboard">Comercial com Outdoor Neon (RETENÇÃO)</option>
-                <option value="classic-auditorium">Auditório Neoclássico (ORCREDI)</option>
-                <option value="glass-tower">Torre de Vidro & NOC (T.I.)</option>
-                <option value="executive-palace">Palácio Executivo & Colunatas (ADM 1)</option>
-                <option value="finance-vault">Bloco Financeiro & Compliance (ADM 2)</option>
-                <option value="support-campus">Pavilhão de Apoio & Treinamento</option>
+                <option value="corporate-hotel">Hotel & Resort com Piscina</option>
+                <option value="modern-fintech">Cubo Moderno</option>
+                <option value="soundstage-hangar">Estúdio / Galpão Arqueado</option>
+                <option value="neon-billboard">Comercial com Outdoor Neon</option>
+                <option value="classic-auditorium">Auditório Clássico com Cúpula</option>
+                <option value="glass-tower">Torre de Vidro com Antena</option>
+                <option value="executive-palace">Palácio com Colunas</option>
+                <option value="finance-vault">Banco / Cofre</option>
+                <option value="support-campus">Campus Verde</option>
+                <option value="cinema-marquee">Cinema com Marquise</option>
+                <option value="office-grid">Prédio de Escritórios</option>
+                <option value="residential-house">Casa Residencial</option>
               </select>
             </div>
             <div>
