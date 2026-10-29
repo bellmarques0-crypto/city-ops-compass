@@ -23,7 +23,10 @@ export type BuildingArchitectureModel =
   | 'modern-fintech'      // Indigo high-tech cube block (BYX)
   | 'executive-palace'    // Slate administrative headquarters (ADM 1)
   | 'finance-vault'       // Violet financial block (ADM 2)
-  | 'support-campus';     // Teal modular training pavilion (Salas de Apoio)
+  | 'support-campus'      // Teal modular training pavilion (Salas de Apoio)
+  | 'cinema-marquee'      // Generic cinema with lit marquee & red carpet
+  | 'office-grid'         // Generic office block with window grid
+  | 'residential-house';  // Small house with gabled roof
 
 export type BuildingRoofType = 
   | 'helipad' 

@@ -47,15 +47,18 @@ interface ElementInspectorProps {
 }
 
 const ARCHITECTURE_MODELS: { value: BuildingArchitectureModel; label: string }[] = [
-  { value: 'corporate-hotel', label: 'Hotel & Resort Corporativo (PINE)' },
-  { value: 'modern-fintech', label: 'Cubo Moderno Fintech (BYX)' },
-  { value: 'soundstage-hangar', label: 'Hangar Arqueado / Soundstage (AMIGOZ)' },
-  { value: 'neon-billboard', label: 'Comercial com Outdoor Neon (RETENÇÃO)' },
-  { value: 'classic-auditorium', label: 'Auditório Neoclássico (ORCREDI)' },
-  { value: 'glass-tower', label: 'Torre de Vidro & Antena T.I.' },
-  { value: 'executive-palace', label: 'Palácio Executivo & Colunas (ADM 1)' },
-  { value: 'finance-vault', label: 'Bloco Financeiro & Compliance (ADM 2)' },
-  { value: 'support-campus', label: 'Pavilhão de Apoio & Treinamento' }
+  { value: 'corporate-hotel', label: 'Hotel & Resort com Piscina' },
+  { value: 'modern-fintech', label: 'Cubo Moderno' },
+  { value: 'soundstage-hangar', label: 'Estúdio / Galpão Arqueado' },
+  { value: 'neon-billboard', label: 'Comercial com Outdoor Neon' },
+  { value: 'classic-auditorium', label: 'Auditório Clássico com Cúpula' },
+  { value: 'glass-tower', label: 'Torre de Vidro com Antena' },
+  { value: 'executive-palace', label: 'Palácio com Colunas' },
+  { value: 'finance-vault', label: 'Banco / Cofre' },
+  { value: 'support-campus', label: 'Campus Verde' },
+  { value: 'cinema-marquee', label: 'Cinema com Marquise' },
+  { value: 'office-grid', label: 'Prédio de Escritórios' },
+  { value: 'residential-house', label: 'Casa Residencial' }
 ];
 
 const ROOF_TYPES: { value: BuildingRoofType; label: string }[] = [
@@ -139,6 +142,36 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
     }
 
     onUpdateRoad({ points: newPoints });
+  };
+
+  const rotateRoad = (deg: number) => {
+    const pts = selectedRoad?.points;
+    if (!pts || pts.length < 2) return;
+    const cx = pts.reduce((a, p) => a + p.x, 0) / pts.length;
+    const cy = pts.reduce((a, p) => a + p.y, 0) / pts.length;
+    const r = (deg * Math.PI) / 180;
+    const cos = Math.cos(r), sin = Math.sin(r);
+    onUpdateRoad({
+      points: pts.map(p => ({
+        x: Math.round(cx + (p.x - cx) * cos - (p.y - cy) * sin),
+        y: Math.round(cy + (p.x - cx) * sin + (p.y - cy) * cos)
+      }))
+    });
+  };
+
+  // Align a straight road to one of the two isometric grid axes (slope 4/7)
+  const alignRoadToAxis = (axis: 'a' | 'b') => {
+    const pts = selectedRoad?.points;
+    if (!pts || pts.length < 2) return;
+    const first = pts[0]!, last = pts[pts.length - 1]!;
+    const cx = (first.x + last.x) / 2, cy = (first.y + last.y) / 2;
+    const half = Math.hypot(last.x - first.x, last.y - first.y) / 2;
+    const ang = Math.atan2(4, 7) * (axis === 'a' ? 1 : -1);
+    const dx = Math.cos(ang) * half, dy = Math.sin(ang) * half;
+    onUpdateRoad({ points: [
+      { x: Math.round(cx - dx), y: Math.round(cy - dy) },
+      { x: Math.round(cx + dx), y: Math.round(cy + dy) }
+    ] });
   };
 
   const handleRotate = () => {
@@ -269,7 +302,7 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
                   Layout & Estilo Arquitetônico
                 </label>
                 <span className="text-[10px] text-blue-600 font-bold bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200 font-mono">
-                  9 Modelos
+                  12 Modelos
                 </span>
               </div>
 
@@ -282,9 +315,12 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
                   { id: 'soundstage-hangar', label: 'Estúdio Stage', icon: '🎬' },
                   { id: 'classic-auditorium', label: 'Cine Clássico', icon: '🎭' },
                   { id: 'modern-fintech', label: 'Fintech Cube', icon: '💳' },
-                  { id: 'executive-palace', label: 'Palácio ADM 1', icon: '🏛️' },
-                  { id: 'finance-vault', label: 'Cofre ADM 2', icon: '🏦' },
-                  { id: 'support-campus', label: 'Campus Apoio', icon: '🌿' }
+                  { id: 'executive-palace', label: 'Palácio Clássico', icon: '🏛️' },
+                  { id: 'finance-vault', label: 'Banco Cofre', icon: '🏦' },
+                  { id: 'support-campus', label: 'Campus Verde', icon: '🌿' },
+                  { id: 'cinema-marquee', label: 'Cinema Marquise', icon: '🎞️' },
+                  { id: 'office-grid', label: 'Escritórios', icon: '🏬' },
+                  { id: 'residential-house', label: 'Casa', icon: '🏠' }
                 ].map(item => {
                   const isCurrent = (selectedBuilding.model || 'corporate-hotel') === item.id;
                   return (
@@ -302,7 +338,10 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
                           'modern-fintech': { r: 'helipad', w: 130, d: 110, h: 130, c: 'reto', curved: false },
                           'executive-palace': { r: 'cornice', w: 170, d: 110, h: 105, c: 'reto', curved: false },
                           'finance-vault': { r: 'solar', w: 140, d: 100, h: 110, c: 'reto', curved: false },
-                          'support-campus': { r: 'solar', w: 160, d: 90, h: 85, c: 'curvo', curved: true }
+                          'support-campus': { r: 'solar', w: 160, d: 90, h: 85, c: 'curvo', curved: true },
+                          'cinema-marquee': { r: 'standard', w: 160, d: 110, h: 100, c: 'reto', curved: false },
+                          'office-grid': { r: 'antennas', w: 130, d: 100, h: 150, c: 'reto', curved: false },
+                          'residential-house': { r: 'standard', w: 90, d: 80, h: 55, c: 'reto', curved: false }
                         };
                         const conf = defaults[m];
                         if (!conf) return;
@@ -347,7 +386,10 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
                       'modern-fintech': { r: 'helipad', w: 130, d: 110, h: 130, c: 'reto', curved: false },
                       'executive-palace': { r: 'cornice', w: 170, d: 110, h: 105, c: 'reto', curved: false },
                       'finance-vault': { r: 'solar', w: 140, d: 100, h: 110, c: 'reto', curved: false },
-                      'support-campus': { r: 'solar', w: 160, d: 90, h: 85, c: 'curvo', curved: true }
+                      'support-campus': { r: 'solar', w: 160, d: 90, h: 85, c: 'curvo', curved: true },
+                      'cinema-marquee': { r: 'standard', w: 160, d: 110, h: 100, c: 'reto', curved: false },
+                      'office-grid': { r: 'antennas', w: 130, d: 100, h: 150, c: 'reto', curved: false },
+                      'residential-house': { r: 'standard', w: 90, d: 80, h: 55, c: 'reto', curved: false }
                     };
                     const conf = defaults[m] || { r: 'standard' as BuildingRoofType, w: 140, d: 100, h: 110, c: 'curvo' as const, curved: true };
                     onUpdateBuilding({
@@ -602,6 +644,30 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
                     </button>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Road Rotation (Girar Rua) */}
+            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <span className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                <RotateCw className="w-3.5 h-3.5" /> Girar Rua
+              </span>
+              <div className="grid grid-cols-4 gap-1">
+                {[-90, -15, 15, 90].map(deg => (
+                  <button
+                    key={deg}
+                    type="button"
+                    disabled={isLocked}
+                    onClick={() => rotateRoad(deg)}
+                    className="py-1.5 text-[11px] font-bold bg-white border border-slate-200 hover:bg-slate-100 rounded-lg text-slate-700 disabled:opacity-40"
+                  >
+                    {deg > 0 ? `+${deg}°` : `${deg}°`}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-1">
+                <button type="button" disabled={isLocked} onClick={() => alignRoadToAxis('a')} className="py-1.5 text-[11px] font-semibold bg-white border border-slate-200 hover:bg-slate-100 rounded-lg text-slate-700 disabled:opacity-40">Alinhar ↘</button>
+                <button type="button" disabled={isLocked} onClick={() => alignRoadToAxis('b')} className="py-1.5 text-[11px] font-semibold bg-white border border-slate-200 hover:bg-slate-100 rounded-lg text-slate-700 disabled:opacity-40">Alinhar ↗</button>
               </div>
             </div>
 
