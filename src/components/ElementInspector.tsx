@@ -47,15 +47,18 @@ interface ElementInspectorProps {
 }
 
 const ARCHITECTURE_MODELS: { value: BuildingArchitectureModel; label: string }[] = [
-  { value: 'corporate-hotel', label: 'Hotel & Resort Corporativo (PINE)' },
-  { value: 'modern-fintech', label: 'Cubo Moderno Fintech (BYX)' },
-  { value: 'soundstage-hangar', label: 'Hangar Arqueado / Soundstage (AMIGOZ)' },
-  { value: 'neon-billboard', label: 'Comercial com Outdoor Neon (RETENÇÃO)' },
-  { value: 'classic-auditorium', label: 'Auditório Neoclássico (ORCREDI)' },
-  { value: 'glass-tower', label: 'Torre de Vidro & Antena T.I.' },
-  { value: 'executive-palace', label: 'Palácio Executivo & Colunas (ADM 1)' },
-  { value: 'finance-vault', label: 'Bloco Financeiro & Compliance (ADM 2)' },
-  { value: 'support-campus', label: 'Pavilhão de Apoio & Treinamento' }
+  { value: 'corporate-hotel', label: 'Hotel & Resort com Piscina' },
+  { value: 'modern-fintech', label: 'Cubo Moderno' },
+  { value: 'soundstage-hangar', label: 'Estúdio / Galpão Arqueado' },
+  { value: 'neon-billboard', label: 'Comercial com Outdoor Neon' },
+  { value: 'classic-auditorium', label: 'Auditório Clássico com Cúpula' },
+  { value: 'glass-tower', label: 'Torre de Vidro com Antena' },
+  { value: 'executive-palace', label: 'Palácio com Colunas' },
+  { value: 'finance-vault', label: 'Banco / Cofre' },
+  { value: 'support-campus', label: 'Campus Verde' },
+  { value: 'cinema-marquee', label: 'Cinema com Marquise' },
+  { value: 'office-grid', label: 'Prédio de Escritórios' },
+  { value: 'residential-house', label: 'Casa Residencial' }
 ];
 
 const ROOF_TYPES: { value: BuildingRoofType; label: string }[] = [

@@ -815,6 +815,59 @@ export const IsometricBuildingSvg: React.FC<IsometricBuildingSvgProps> = ({
         </g>
       )}
 
+      {/* GENERIC LAYOUT OVERLAYS (cinema / offices / house) */}
+      {(() => {
+        const R = (u: number, v: number) => [gFrontX + (gRightX - gFrontX) * u, gFrontY + (gRightY - gFrontY) * u - h * v] as const;
+        const L = (u: number, v: number) => [gLeftX + (gFrontX - gLeftX) * u, gLeftY + (gFrontY - gLeftY) * u - h * v] as const;
+        const quad = (f: typeof R, u0: number, v0: number, u1: number, v1: number) =>
+          [f(u0, v0), f(u1, v0), f(u1, v1), f(u0, v1)].map(p => p.join(',')).join(' ');
+        if (model === 'office-grid') {
+          const cols = 4, rows = Math.max(3, Math.floor(h / 22));
+          const cells: React.ReactNode[] = [];
+          [R, L].forEach((f, fi) => {
+            for (let c = 0; c < cols; c++) for (let r = 0; r < rows; r++) {
+              const u0 = 0.08 + c * (0.84 / cols), v0 = 0.1 + r * (0.82 / rows);
+              cells.push(<polygon key={`${fi}-${c}-${r}`} points={quad(f, u0, v0, u0 + 0.84 / cols - 0.05, v0 + 0.82 / rows - 0.06)} fill={fi === 0 ? '#bae6fd' : '#7dd3fc'} opacity={(c + r) % 3 === 0 ? 0.55 : 0.92} stroke="#0f172a" strokeOpacity="0.15" strokeWidth="0.5" />);
+            }
+          });
+          return <g id="office-grid">{cells}</g>;
+        }
+        if (model === 'cinema-marquee') {
+          const lights = Array.from({ length: 10 }, (_, i) => R(0.05 + i * 0.1, 0.42));
+          const [sx, sy] = L(0.75, 0.95);
+          return (
+            <g id="cinema-marquee">
+              <polygon points={quad(R, 0.02, 0.32, 0.98, 0.5)} fill="#1e1b4b" stroke="#facc15" strokeWidth="1.5" />
+              {lights.map(([lx, ly], i) => <circle key={i} cx={lx} cy={ly} r="2.2" fill="#fde047" className={i % 2 ? 'animate-pulse' : ''} />)}
+              <polygon points={quad(R, 0.3, 0, 0.7, 0.3)} fill="#0f172a" opacity="0.85" />
+              <polygon points={`${R(0.3, 0).join(',')} ${R(0.7, 0).join(',')} ${R(0.7, 0).map((n, j) => j === 0 ? n - 22 : n + 13).join(',')} ${R(0.3, 0).map((n, j) => j === 0 ? n - 22 : n + 13).join(',')}`} fill="#dc2626" />
+              <g transform={`translate(${sx}, ${sy})`}>
+                <rect x="-9" y="0" width="18" height={h * 0.6} rx="3" fill="#7c3aed" stroke="#facc15" strokeWidth="1.5" />
+                {'CINE'.split('').map((ch, i) => <text key={i} x="0" y={14 + i * 13} fill="#fde047" fontSize="11" fontWeight="900" textAnchor="middle">{ch}</text>)}
+              </g>
+            </g>
+          );
+        }
+        if (model === 'residential-house') {
+          const mid = (a: readonly number[], b: readonly number[]) => [(a[0]! + b[0]!) / 2, (a[1]! + b[1]!) / 2 - 32];
+          const rA = mid([rLeftX, rLeftY], [rFrontX, rFrontY]);
+          const rB = mid([rBackX, rBackY], [rRightX, rRightY]);
+          const roof = shadeColor(secondaryColor, -10);
+          return (
+            <g id="house">
+              <polygon points={`${rLeftX},${rLeftY} ${rBackX},${rBackY} ${rB.join(',')} ${rA.join(',')}`} fill={shadeColor(roof, -30)} />
+              <polygon points={`${rLeftX},${rLeftY} ${rFrontX},${rFrontY} ${rA.join(',')}`} fill={shadeColor(primaryColor, -20)} stroke="#00000022" />
+              <polygon points={`${rFrontX},${rFrontY} ${rRightX},${rRightY} ${rB.join(',')} ${rA.join(',')}`} fill={roof} stroke="#00000033" />
+              <polygon points={quad(R, 0.4, 0, 0.6, 0.6)} fill="#78350f" />
+              <polygon points={quad(R, 0.1, 0.35, 0.3, 0.75)} fill="#e0f2fe" stroke="#ffffff" strokeWidth="1.2" />
+              <polygon points={quad(R, 0.7, 0.35, 0.9, 0.75)} fill="#e0f2fe" stroke="#ffffff" strokeWidth="1.2" />
+              <polygon points={quad(L, 0.3, 0.35, 0.7, 0.75)} fill="#bae6fd" stroke="#ffffff" strokeWidth="1.2" />
+            </g>
+          );
+        }
+        return null;
+      })()}
+
       {/* D. Classic Auditorium Dome (Curved Neoclassic Cupola) */}
       {(roofType === 'cornice' || model === 'classic-auditorium') && (
         <g transform={`translate(${rFrontX + (rBackX - rFrontX) * 0.5}, ${rFrontY + (rBackY - rFrontY) * 0.5})`}>
