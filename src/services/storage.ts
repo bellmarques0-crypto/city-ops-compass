@@ -16,23 +16,33 @@ const WORKSTATIONS_STORAGE_KEY = 'cidade_operacional_workstations_v3';
 const URBAN_ELEMENTS_STORAGE_KEY = 'cidade_operacional_urban_elements_v3';
 const ROADS_STORAGE_KEY = 'cidade_operacional_roads_v3';
 
-export function loadStoredBuildings(): Building[] {
+/**
+ * Reads a stored JSON array. Returns `undefined` only when the key is absent
+ * or the content is invalid (so callers fall back to demo data); an existing
+ * empty list `[]` is returned as-is and respected.
+ */
+function readStoredArray<T>(key: string, label: string): T[] | undefined {
+  let raw: string | null;
   try {
-    const raw = localStorage.getItem(BUILDINGS_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed.map((b: Building) => ({
-          ...b,
-          cornerStyle: b.cornerStyle || 'curvo',
-          isCurved: b.isCurved !== false
-        }));
-      }
-    }
+    raw = localStorage.getItem(key);
   } catch (err) {
-    console.error('Falha ao carregar prédios salvos:', err);
+    console.error(`Falha ao acessar ${label}:`, err);
+    return undefined;
   }
-  return INITIAL_BUILDINGS.map((b: Building) => ({
+  if (raw === null) return undefined;
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed as T[];
+    console.warn(`Conteúdo salvo de ${label} inválido; usando dados iniciais sem sobrescrever.`);
+  } catch (err) {
+    console.error(`Conteúdo salvo de ${label} corrompido; usando dados iniciais sem sobrescrever.`, err);
+  }
+  return undefined;
+}
+
+export function loadStoredBuildings(): Building[] {
+  const stored = readStoredArray<Building>(BUILDINGS_STORAGE_KEY, 'prédios');
+  return (stored ?? INITIAL_BUILDINGS).map((b: Building) => ({
     ...b,
     cornerStyle: b.cornerStyle || 'curvo',
     isCurved: b.isCurved !== false
@@ -48,18 +58,7 @@ export function saveBuildings(buildings: Building[]): void {
 }
 
 export function loadStoredUrbanElements(): UrbanElement[] {
-  try {
-    const raw = localStorage.getItem(URBAN_ELEMENTS_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
-      }
-    }
-  } catch (err) {
-    console.error('Falha ao carregar elementos urbanos:', err);
-  }
-  return INITIAL_URBAN_ELEMENTS;
+  return readStoredArray<UrbanElement>(URBAN_ELEMENTS_STORAGE_KEY, 'elementos urbanos') ?? INITIAL_URBAN_ELEMENTS;
 }
 
 export function saveUrbanElements(elements: UrbanElement[]): void {
@@ -71,18 +70,7 @@ export function saveUrbanElements(elements: UrbanElement[]): void {
 }
 
 export function loadStoredRoads(): RoadSegment[] {
-  try {
-    const raw = localStorage.getItem(ROADS_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
-      }
-    }
-  } catch (err) {
-    console.error('Falha ao carregar malha viária:', err);
-  }
-  return INITIAL_ROADS;
+  return readStoredArray<RoadSegment>(ROADS_STORAGE_KEY, 'malha viária') ?? INITIAL_ROADS;
 }
 
 export function saveRoads(roads: RoadSegment[]): void {
@@ -98,7 +86,7 @@ export function loadStoredWorkstations(): Record<string, Workstation[]> {
     const raw = localStorage.getItem(WORKSTATIONS_STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (typeof parsed === 'object' && parsed !== null) {
+      if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
         return parsed;
       }
     }

@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react';
 import { Building, Workstation } from '../types/city';
+import { OperationalIndicatorsSection } from './OperationalIndicatorsSection';
 import { 
   X, 
   ChevronLeft, 
@@ -173,6 +174,14 @@ export const MetricSidePanel: React.FC<MetricSidePanelProps> = ({
 
       {/* 2. Scrollable Body Content */}
       <div className="flex-1 overflow-y-auto p-5 space-y-5 bg-[#fafbfc]">
+        <OperationalIndicatorsSection buildingId={building.id} />
+
+        <div className="pt-2 border-t border-slate-200">
+          <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-200 text-slate-600">
+            Demonstrativo · dados ilustrativos
+          </span>
+        </div>
+
         {/* Period Selector Tabs */}
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
