@@ -550,10 +550,10 @@ export function generateWorkstationsForBuilding(building: Building): Workstation
 
     const statusIndex = (i * 3 + building.name.length) % statuses.length;
     const isOffline = i === count - 1 || (count > 20 && i === count - 2);
-    const status: WorkstationStatus = isOffline ? 'offline' : statuses[statusIndex];
+    const status: WorkstationStatus = isOffline ? 'offline' : (statuses[statusIndex] ?? 'disponivel');
 
     const hasOperator = status !== 'offline' && status !== 'disponivel';
-    const operatorName = MOCK_OPERATOR_NAMES[(i + building.name.charCodeAt(0)) % MOCK_OPERATOR_NAMES.length];
+    const operatorName = MOCK_OPERATOR_NAMES[(i + building.name.charCodeAt(0)) % MOCK_OPERATOR_NAMES.length] ?? 'Operador';
     
     let operator: Operator | null = null;
     if (hasOperator || status === 'disponivel') {
@@ -585,7 +585,7 @@ export function generateWorkstationsForBuilding(building: Building): Workstation
         headset: 'Jabra Evolve 20 USB',
         ramal: `${ramalNumber}`
       },
-      callDurationSeconds: status === 'em_atendimento' ? Math.floor(45 + (i * 37) % 520) : undefined,
+      ...(status === 'em_atendimento' ? { callDurationSeconds: Math.floor(45 + (i * 37) % 520) } : {}),
       queue: building.type === 'produto' ? `Fila Atendimento ${building.name}` : `Chamados ${building.name}`
     });
   }

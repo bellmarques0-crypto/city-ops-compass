@@ -175,7 +175,7 @@ export const BuildingNode: React.FC<BuildingNodeProps> = ({
         <div className="px-2 py-1.5 bg-white border-t border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-1 text-[10px] text-slate-500 truncate max-w-[120px]">
             <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: building.color }} />
-            <span className="truncate">{building.supervisor.split('-')[0].trim()}</span>
+            <span className="truncate">{building.supervisor.split('-')[0]?.trim()}</span>
           </div>
 
           {/* Quick Action Button */}

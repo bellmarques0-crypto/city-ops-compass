@@ -50,12 +50,14 @@ export const MetricSidePanel: React.FC<MetricSidePanelProps> = ({
 
   const handlePrev = () => {
     const prevIdx = (currentIndex - 1 + totalCount) % totalCount;
-    onSelectBuilding(allBuildings[prevIdx]);
+    const previous = allBuildings[prevIdx];
+    if (previous) onSelectBuilding(previous);
   };
 
   const handleNext = () => {
     const nextIdx = (currentIndex + 1) % totalCount;
-    onSelectBuilding(allBuildings[nextIdx]);
+    const next = allBuildings[nextIdx];
+    if (next) onSelectBuilding(next);
   };
 
   const ext = building.metricsExtended;

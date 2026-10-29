@@ -147,6 +147,7 @@ function CidadeOperacional() {
     // Default select first product building so the side panel opens with data immediately
     if (loadedBuildings.length > 0) {
       const defaultBuilding = loadedBuildings.find(b => b.code === 'PRD-PIN') || loadedBuildings[0];
+      if (!defaultBuilding) return;
       setSelectedBuilding(defaultBuilding);
       setVisitedBuildingIds([defaultBuilding.id]);
     }
@@ -232,6 +233,7 @@ function CidadeOperacional() {
     if (historyIndex > 0) {
       const prevIdx = historyIndex - 1;
       const state = history[prevIdx];
+      if (!state) return;
       setBuildings(state.buildings);
       setUrbanElements(state.urbanElements);
       setRoads(state.roads);
@@ -255,6 +257,7 @@ function CidadeOperacional() {
     if (historyIndex < history.length - 1) {
       const nextIdx = historyIndex + 1;
       const state = history[nextIdx];
+      if (!state) return;
       setBuildings(state.buildings);
       setUrbanElements(state.urbanElements);
       setRoads(state.roads);

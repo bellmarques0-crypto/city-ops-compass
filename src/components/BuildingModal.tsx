@@ -191,7 +191,7 @@ export const BuildingModal: React.FC<BuildingModalProps> = ({
         notes: notes.trim(),
         supervisor: supervisor.trim() || 'Gestão da Área',
         slaTargetPercentage: 95,
-        tags: [type === 'produto' ? 'Operacional' : 'Corporativo', category.split(' ')[0]]
+        tags: [type === 'produto' ? 'Operacional' : 'Corporativo', category.split(' ')[0] ?? category]
       },
       editingBuilding?.id
     );

@@ -101,9 +101,12 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
     if (!selectedRoad?.points || selectedRoad.points.length < 2) return 0;
     let len = 0;
     for (let i = 0; i < selectedRoad.points.length - 1; i++) {
+      const start = selectedRoad.points[i];
+      const end = selectedRoad.points[i + 1];
+      if (!start || !end) continue;
       len += Math.hypot(
-        selectedRoad.points[i + 1].x - selectedRoad.points[i].x,
-        selectedRoad.points[i + 1].y - selectedRoad.points[i].y
+        end.x - start.x,
+        end.y - start.y
       );
     }
     return Math.round(len);
@@ -117,12 +120,14 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
     const ratio = target / currentLen;
 
     const startPt = selectedRoad.points[0];
+    if (!startPt) return;
     const newPoints = [{ ...startPt }];
 
     for (let i = 1; i < selectedRoad.points.length; i++) {
       const prevOrig = selectedRoad.points[i - 1];
       const currOrig = selectedRoad.points[i];
       const prevNew = newPoints[i - 1];
+      if (!prevOrig || !currOrig || !prevNew) continue;
 
       const dx = (currOrig.x - prevOrig.x) * ratio;
       const dy = (currOrig.y - prevOrig.y) * ratio;
@@ -300,6 +305,7 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
                           'support-campus': { r: 'solar', w: 160, d: 90, h: 85, c: 'curvo', curved: true }
                         };
                         const conf = defaults[m];
+                        if (!conf) return;
                         onUpdateBuilding({
                           model: m,
                           roofType: conf.r,

@@ -397,7 +397,7 @@ export function createDefaultUrbanElement(
     rotation: 0,
     scale: 1,
     color: def.color,
-    secondaryColor: def.secColor,
+    ...(def.secColor ? { secondaryColor: def.secColor } : {}),
     zIndex: 10,
     locked: false
   };

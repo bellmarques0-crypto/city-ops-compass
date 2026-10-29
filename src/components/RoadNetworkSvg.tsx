@@ -12,7 +12,7 @@ interface RoadNetworkSvgProps {
   isEditMode: boolean;
   onSelectRoad?: (road: RoadSegment) => void;
   onStartDragRoadPoint?: (e: React.MouseEvent, roadId: string, pointIndex: number) => void;
-  onAddPointToRoad?: (roadId: string, pointIndex: number, x: number, y: number) => void;
+  onAddPointToRoad?: ((roadId: string, pointIndex: number, x: number, y: number) => void) | undefined;
 }
 
 export const RoadNetworkSvg: React.FC<RoadNetworkSvgProps> = ({
@@ -206,6 +206,7 @@ export const RoadNetworkSvg: React.FC<RoadNetworkSvgProps> = ({
                 <g opacity="0.95">
                   {pts.slice(0, -1).map((p1, idx) => {
                     const p2 = pts[idx + 1];
+                    if (!p2) return null;
                     const midX = (p1.x + p2.x) / 2;
                     const midY = (p1.y + p2.y) / 2;
                     const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * (180 / Math.PI);
@@ -306,6 +307,7 @@ export const RoadNetworkSvg: React.FC<RoadNetworkSvgProps> = ({
                 {/* Add Midpoint Control Handle (+) */}
                 {pts.slice(0, -1).map((p1, idx) => {
                   const p2 = pts[idx + 1];
+                  if (!p2) return null;
                   const midX = (p1.x + p2.x) / 2;
                   const midY = (p1.y + p2.y) / 2;
 
