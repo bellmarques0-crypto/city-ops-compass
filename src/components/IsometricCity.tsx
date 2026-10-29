@@ -87,7 +87,7 @@ export const IsometricCity: React.FC<IsometricCityProps> = ({
   const [draggingRoadPoint, setDraggingRoadPoint] = useState<{
     roadId: string;
     pointIndex: number;
-    last?: { x: number; y: number };
+    last?: { x: number; y: number } | undefined;
   } | null>(null);
 
   // Building resizing state
