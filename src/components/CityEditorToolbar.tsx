@@ -283,6 +283,34 @@ export const CityEditorToolbar: React.FC<CityEditorToolbarProps> = ({
               </button>
               <button
                 type="button"
+                onClick={() => handleSelectElement('arvore_carvalho')}
+                className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 transition-colors"
+              >
+                Carvalho de Copa Redonda
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSelectElement('arvore_ipe')}
+                className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 transition-colors"
+              >
+                Ipê Amarelo Florido
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSelectElement('arvore_pinheiro')}
+                className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 transition-colors"
+              >
+                Pinheiro / Cipreste
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSelectElement('arbustos')}
+                className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 transition-colors"
+              >
+                Arbustos Baixos
+              </button>
+              <button
+                type="button"
                 onClick={() => handleSelectElement('fonte')}
                 className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-800 text-slate-200 transition-colors"
               >

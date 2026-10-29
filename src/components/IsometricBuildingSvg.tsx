@@ -868,6 +868,56 @@ export const IsometricBuildingSvg: React.FC<IsometricBuildingSvgProps> = ({
         return null;
       })()}
 
+      {/* POLISH: glass sheen, edge highlights, parapet, entrance canopy and rooftop HVAC */}
+      {model !== 'residential-house' && model !== 'soundstage-hangar' && (() => {
+        const gid = `sheen-${building.id}`;
+        const R = (u: number, v: number) => `${gFrontX + (gRightX - gFrontX) * u},${gFrontY + (gRightY - gFrontY) * u - h * v}`;
+        const L = (u: number, v: number) => `${gLeftX + (gFrontX - gLeftX) * u},${gLeftY + (gFrontY - gLeftY) * u - h * v}`;
+        const cx = (rFrontX + rBackX) / 2;
+        const cy = (rFrontY + rBackY) / 2;
+        const lit = [0.15, 0.4, 0.65].map((u, i) => ({ u, v: 0.2 + ((i * 37 + building.id.length * 13) % 50) / 100 }));
+        return (
+          <g id="facade-polish" pointerEvents="none">
+            <defs>
+              <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.38" />
+                <stop offset="45%" stopColor="#ffffff" stopOpacity="0.04" />
+                <stop offset="100%" stopColor="#0f172a" stopOpacity="0.22" />
+              </linearGradient>
+            </defs>
+            <polygon points={`${R(0, 0)} ${R(1, 0)} ${R(1, 1)} ${R(0, 1)}`} fill={`url(#${gid})`} />
+            <polygon points={`${L(0, 0)} ${L(1, 0)} ${L(1, 1)} ${L(0, 1)}`} fill="#0f172a" opacity="0.12" />
+            {/* diagonal glass reflections */}
+            <polygon points={`${R(0.12, 0.55)} ${R(0.22, 0.95)} ${R(0.3, 0.95)} ${R(0.2, 0.55)}`} fill="#ffffff" opacity="0.18" />
+            <polygon points={`${R(0.5, 0.2)} ${R(0.62, 0.7)} ${R(0.66, 0.7)} ${R(0.54, 0.2)}`} fill="#ffffff" opacity="0.12" />
+            {/* lit windows */}
+            {lit.map((p, i) => (
+              <polygon key={i} points={`${L(p.u, p.v)} ${L(p.u + 0.1, p.v)} ${L(p.u + 0.1, p.v + 0.08)} ${L(p.u, p.v + 0.08)}`} fill="#fde68a" opacity="0.85" />
+            ))}
+            {/* front corner highlight */}
+            <line x1={gFrontX} y1={gFrontY} x2={rFrontX} y2={rFrontY} stroke="#ffffff" strokeOpacity="0.45" strokeWidth="1.5" />
+            {/* parapet rim */}
+            <polygon points={`${rLeftX},${rLeftY} ${rBackX},${rBackY} ${rRightX},${rRightY} ${rFrontX},${rFrontY}`} fill="none" stroke="#ffffff" strokeOpacity="0.55" strokeWidth="2" />
+            {/* glowing entrance canopy */}
+            <polygon points={`${R(0.38, 0.16)} ${R(0.62, 0.16)} ${R(0.62, 0.16).split(',').map((n, j) => Number(n) + (j === 0 ? -8 : 5)).join(',')} ${R(0.38, 0.16).split(',').map((n, j) => Number(n) + (j === 0 ? -8 : 5)).join(',')}`} fill="#f8fafc" stroke="#94a3b8" strokeWidth="0.6" />
+            <polygon points={`${R(0.42, 0)} ${R(0.58, 0)} ${R(0.58, 0.15)} ${R(0.42, 0.15)}`} fill="#fef9c3" opacity="0.9" />
+            {/* rooftop HVAC units */}
+            {(roofType === 'standard' || roofType === 'antennas' || roofType === 'terrace') && (
+              <g transform={`translate(${cx}, ${cy})`}>
+                {[[-w * 0.3, 2], [w * 0.15, -6]].map(([ox, oy], i) => (
+                  <g key={i} transform={`translate(${ox}, ${oy})`}>
+                    <polygon points="-8,0 0,-4 8,0 0,4" fill="#e2e8f0" />
+                    <polygon points="-8,0 0,4 0,10 -8,6" fill="#94a3b8" />
+                    <polygon points="0,4 8,0 8,6 0,10" fill="#cbd5e1" />
+                    <ellipse cx="0" cy="0" rx="4" ry="2" fill="#475569" />
+                  </g>
+                ))}
+              </g>
+            )}
+          </g>
+        );
+      })()}
+
       {/* D. Classic Auditorium Dome (Curved Neoclassic Cupola) */}
       {(roofType === 'cornice' || model === 'classic-auditorium') && (
         <g transform={`translate(${rFrontX + (rBackX - rFrontX) * 0.5}, ${rFrontY + (rBackY - rFrontY) * 0.5})`}>

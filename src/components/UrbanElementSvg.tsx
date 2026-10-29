@@ -131,6 +131,56 @@ export const UrbanElementSvg: React.FC<UrbanElementSvgProps> = ({
         </g>
       )}
 
+      {/* 5b. CARVALHO */}
+      {type === 'arvore_carvalho' && (
+        <g>
+          <ellipse cx="4" cy="6" rx="22" ry="8" fill="#0f172a" opacity="0.25" />
+          <rect x="-3" y="-14" width="6" height="20" rx="2" fill="#78350f" />
+          <circle cx="-9" cy="-24" r="13" fill="#166534" />
+          <circle cx="9" cy="-24" r="13" fill="#15803d" />
+          <circle cx="0" cy="-34" r="14" fill="#16a34a" />
+          <circle cx="-4" cy="-38" r="6" fill="#4ade80" opacity="0.5" />
+        </g>
+      )}
+
+      {/* 5c. IPÊ AMARELO */}
+      {type === 'arvore_ipe' && (
+        <g>
+          <ellipse cx="3" cy="6" rx="18" ry="7" fill="#0f172a" opacity="0.25" />
+          <path d="M 0 6 L 0 -14 M 0 -10 L -8 -20 M 0 -12 L 7 -22" stroke="#57534e" strokeWidth="3" strokeLinecap="round" fill="none" />
+          <circle cx="-8" cy="-26" r="11" fill="#eab308" />
+          <circle cx="8" cy="-27" r="11" fill="#facc15" />
+          <circle cx="0" cy="-35" r="11" fill="#fde047" />
+          {[[-10, -30], [5, -38], [10, -24], [-3, -22]].map(([fx, fy], i) => (
+            <circle key={i} cx={fx} cy={fy} r="2" fill="#fef9c3" />
+          ))}
+        </g>
+      )}
+
+      {/* 5d. PINHEIRO */}
+      {type === 'arvore_pinheiro' && (
+        <g>
+          <ellipse cx="3" cy="5" rx="12" ry="5" fill="#0f172a" opacity="0.25" />
+          <rect x="-2" y="-6" width="4" height="11" fill="#78350f" />
+          <polygon points="-14,-4 0,-24 14,-4" fill="#14532d" />
+          <polygon points="-11,-16 0,-36 11,-16" fill="#166534" />
+          <polygon points="-8,-28 0,-48 8,-28" fill="#15803d" />
+          <polygon points="0,-48 8,-28 0,-30" fill="#0f3d22" opacity="0.5" />
+        </g>
+      )}
+
+      {/* 5e. ARBUSTOS */}
+      {type === 'arbustos' && (
+        <g>
+          <ellipse cx="0" cy="4" rx="22" ry="6" fill="#0f172a" opacity="0.2" />
+          <circle cx="-12" cy="-4" r="8" fill="#15803d" />
+          <circle cx="0" cy="-7" r="9" fill="#16a34a" />
+          <circle cx="12" cy="-4" r="8" fill="#166534" />
+          <circle cx="-3" cy="-10" r="2" fill="#f472b6" />
+          <circle cx="8" cy="-8" r="2" fill="#f472b6" />
+        </g>
+      )}
+
       {/* 6. CANTEIROS */}
       {type === 'canteiros' && (
         <g>
