@@ -284,7 +284,7 @@ export const RoadNetworkSvg: React.FC<RoadNetworkSvgProps> = ({
               <g key={`z-${di}`} transform={`rotate(${(d.angle * 180) / Math.PI})`}>
                 {[-1, 1].map((side) => (
                   <g key={side} transform={`translate(${side * (d.half + 7)}, 0)`}>
-                    {Array.from({ length: Math.max(3, Math.floor(d.width / 7)) }, (_, k, arr) => arr.length).map((n, k) => (
+                    {Array.from({ length: Math.max(3, Math.floor(d.width / 7)) }, () => Math.max(3, Math.floor(d.width / 7))).map((n, k) => (
                       <rect key={k} x="-4" y={-d.width / 2 + 2 + k * ((d.width - 4) / n)} width="8" height={(d.width - 4) / n - 2.5} fill="#ffffff" opacity="0.92" rx="0.5" />
                     ))}
                   </g>
