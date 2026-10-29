@@ -25,7 +25,7 @@ export const LayersPanel: React.FC<LayersPanelProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="absolute top-20 left-6 z-50 select-none w-72 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-left-4 duration-200 text-xs">
+    <div className="absolute top-80 md:top-36 left-4 md:left-6 z-50 select-none w-72 max-h-[calc(100vh-22rem)] md:max-h-[calc(100vh-10rem)] overflow-y-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200 animate-in fade-in slide-in-from-left-4 duration-200 text-xs">
       {/* Header */}
       <div className="px-4 py-3 bg-slate-900 text-white flex items-center justify-between">
         <div className="flex items-center gap-2">
