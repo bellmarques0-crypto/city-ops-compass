@@ -1,0 +1,32 @@
+[
+  {
+    "app": "preview",
+    "viewport": "desktop",
+    "trigger": "BYX dock",
+    "result": "BYX metrics panel",
+    "status": "pass"
+  },
+  {
+    "app": "preview",
+    "viewport": "desktop",
+    "trigger": "floor plan + PA-01 + cancel + return + editor",
+    "result": "workstation modal and editor visible",
+    "status": "pass",
+    "errors": []
+  },
+  {
+    "app": "preview",
+    "viewport": "phone",
+    "trigger": "BYX dock",
+    "result": "BYX metrics panel",
+    "status": "pass"
+  },
+  {
+    "app": "preview",
+    "viewport": "phone",
+    "trigger": "floor plan + PA-01 + cancel + return + editor",
+    "result": "workstation modal and editor visible",
+    "status": "pass",
+    "errors": []
+  }
+]

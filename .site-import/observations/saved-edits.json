@@ -1,0 +1,16 @@
+[
+  {
+    "viewport": "desktop",
+    "workstation saved and read back": true,
+    "editor menus": true,
+    "new road saved": true,
+    "runtime errors": []
+  },
+  {
+    "viewport": "phone",
+    "workstation saved and read back": true,
+    "editor menus": true,
+    "new road saved": true,
+    "runtime errors": []
+  }
+]
