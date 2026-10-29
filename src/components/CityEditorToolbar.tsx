@@ -116,7 +116,7 @@ export const CityEditorToolbar: React.FC<CityEditorToolbarProps> = ({
       ref={toolbarRef}
       className="absolute top-40 md:top-20 left-1/2 -translate-x-1/2 z-50 select-none flex items-center justify-center p-1 pointer-events-auto w-[98vw] md:w-auto overflow-visible"
     >
-      <div className="bg-slate-900/95 backdrop-blur-md text-white px-3 py-2 rounded-2xl shadow-2xl border border-slate-700/80 flex flex-wrap md:flex-nowrap items-center gap-1.5 text-xs font-semibold whitespace-nowrap overflow-visible relative">
+      <div className="bg-slate-900/95 backdrop-blur-md text-white px-3 py-2 rounded-2xl shadow-2xl border border-slate-700/80 flex flex-wrap xl:flex-nowrap items-center gap-1.5 text-xs font-semibold whitespace-nowrap overflow-visible relative max-w-[98vw]">
         {/* Mode Indicator */}
         <div className="flex items-center gap-2 pr-2.5 border-r border-slate-700 shrink-0">
           <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />

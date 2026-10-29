@@ -160,7 +160,7 @@ export const ElementInspector: React.FC<ElementInspectorProps> = ({
   };
 
   return (
-    <div className="absolute top-20 right-6 z-50 select-none w-84 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-right-4 duration-200 text-xs flex flex-col max-h-[82vh]">
+    <div className="absolute top-80 md:top-36 right-4 md:right-6 z-50 select-none w-84 max-w-[calc(100vw-2rem)] bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-right-4 duration-200 text-xs flex flex-col max-h-[calc(100vh-22rem)] md:max-h-[calc(100vh-10rem)]">
       {/* Header */}
       <div 
         className="px-4 py-3 text-white flex items-center justify-between shrink-0"
