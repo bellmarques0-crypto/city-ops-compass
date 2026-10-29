@@ -37,6 +37,10 @@ export const UrbanElementSvg: React.FC<UrbanElementSvgProps> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
+      {/* Invisible hitbox so small items (benches, lamps) are easy to click */}
+      {isEditMode && (
+        <rect x="-30" y="-40" width="60" height="55" fill="transparent" pointerEvents="all" />
+      )}
       {/* Selection Box in Edit Mode */}
       {isSelected && isEditMode && (
         <rect

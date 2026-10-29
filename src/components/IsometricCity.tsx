@@ -315,6 +315,7 @@ export const IsometricCity: React.FC<IsometricCityProps> = ({
     const layerKey: CityLayerKey = isPlaza ? 'pracas' : 'mobiliario';
     if (!isEditMode || element.locked || isLayerLocked(layerKey)) return;
     e.stopPropagation();
+    onSelectUrbanElement(element);
     const coords = screenToSvgCoords(e.clientX, e.clientY);
     setDraggingItem({
       id: element.id,
